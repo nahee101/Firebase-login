@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer clipped app value="true">
+    <v-navigation-drawer clipped app v-model='drawer'>
       <v-list>
         <!-- items 배열을 읽어와 메뉴로 바인딩 -->
         <v-list-item 
@@ -14,14 +14,23 @@
         </v-list-item>
 
         <!-- 로그인이 된 경우에만 로그아웃 버튼을 표시한다 -->
-        <v-list-item
-        v-if="fnGetAuthStatus"
-        @click="fnDoLogOut">
+        <v-list-item 
+        @click="fnDoLogout" v-if="fnGetAuthStatus">
           <v-list-item-action>
             <v-icon>mdi-arrow-right-bold-box-outline</v-icon>
           </v-list-item-action>
           <v-list-item-title>로그아웃</v-list-item-title>
         </v-list-item>
+
+        <!-- 로그인이 된 경우에만 회원 탈퇴 버튼을 표시한다 -->
+        <v-list-item 
+        @click="fnDoDelete" v-if="fnGetAuthStatus">
+          <v-list-item-action>
+            <v-icon>mdi-arrow-right-bold-box</v-icon>
+          </v-list-item-action>
+          <v-list-item-title>회원탈퇴</v-list-item-title>
+        </v-list-item>
+
       </v-list>
     </v-navigation-drawer>
 
@@ -48,12 +57,19 @@
         </v-btn>
 
         <!-- 로그인 된 경우에만 로그아웃 버튼 표시 -->
-        <v-btn text 
-        v-if="fnGetAuthStatus"
-        @click="fnDoLogout">
+        <v-btn 
+        @click="fnDoLogout" text v-if="fnGetAuthStatus">
           <v-icon left>mdi-arrow-right-bold-box-outline</v-icon>
           로그아웃
         </v-btn>
+
+        <!-- 로그인 된 경우에만 회원 탈퇴 버튼 표시 -->
+        <v-btn 
+        @click="fnDoDelete" text v-if="fnGetAuthStatus">
+          <v-icon left>mdi-arrow-right-bold-box</v-icon>
+          회원탈퇴
+        </v-btn>
+
       </v-toolbar-items>
     </v-app-bar>
 
@@ -85,7 +101,7 @@ export default {
     fnGetMenuItem() {
       //fn은 내가 만든 함수라는 의미
       /* 로그인 하지 않았을 때 */
-      if(!this.login) {
+      if(!this.fnGetAuthStatus) {
         return [
           {title: '회원가입', to: '/register', icon: 'mdi-lock-open-outline'},
         ]
@@ -96,9 +112,13 @@ export default {
       }
     }
   },
-  methods: {
+  methods : {
     fnDoLogout() {
       this.$store.dispatch('fnDoLogout')
+    },
+    
+    fnDoDelete() {
+      this.$store.dispatch('fnDoDelete')
     }
   }
 }

@@ -20,6 +20,7 @@ new Vue({
     firebase.auth().onAuthStateChanged((pUserInfo) => {
       if(pUserInfo) {
         //이미 로그인 되어 있는지 상태를 파악해서 처리
+        store.dispatch('fnDoLoginAuto', pUserInfo)
       }
     })
   },

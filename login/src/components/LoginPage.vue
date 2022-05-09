@@ -24,14 +24,19 @@
                     
                     <v-btn 
                     type="submit"
-                    color="orange" dark v-if="!loading">로그인</v-btn>
+                    color="orange" dark v-if="!fnGetLoading">로그인</v-btn>
 
                     <!-- 시간 지연이 발생할 경우 회전 프로그레스 원 표시 -->
                     <v-progress-circular 
-                    v-if="loading"
+                    v-if="fnGetLoading"
                     color="grey lighten-1" :width="7" :size="60"
                     indeterminate>
                     </v-progress-circular>
+
+                    <!-- 오류 메시지가 있을 경우 알림창을 띄운다 -->
+                    <v-alert class="mt-3" type="error" dismissible v-model="bAlert">
+                        {{fnGetErrorMsg}}
+                    </v-alert>
 
                 </form>
             </v-col>
@@ -45,7 +50,7 @@ export default {
         return {
             sEmail: '',
             sPassword: '',
-            loading: false
+            bAlert: false
         }
     },
     methods: {
@@ -54,6 +59,24 @@ export default {
                 pEmail: this.sEmail,
                 pPassword: this.sPassword
             })
+        }
+    },
+    computed: {
+        fnGetLoading() {
+            return this.$store.getters.fnGetLoading;
+        },
+        fnGetErrMsg() {
+            return this.$store.getters.fnGetErrorMessage;
+        }
+    },
+    watch: {
+        //fnGetErrMsg의 값이 있으면 true로 바꿈
+        fnGetErrMsg(pMsg) {
+            if(pMsg) this.bAlert = true;
+        },
+        bAlert(pValue) {
+            if (pValue == false) 
+            this.$store.commit('fnSetErrorMessage','');
         }
     }
 }

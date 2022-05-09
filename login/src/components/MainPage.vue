@@ -18,7 +18,8 @@
                 <p class="pb-2 grey lighten-2">{{fnGetUser.email}}</p>
             </v-col>
             <v-col cols="6" offset="3" class="text-center mt-1">
-                <v-btn color="orange" large dark block>
+                <v-btn color="orange" large dark block
+                @click="fnSendPasswordReset">
                     <v-icon>mdi-email</v-icon>
                     비밀번호 재설정
                 </v-btn>
@@ -28,12 +29,26 @@
 </template>
 
 <script>
+import {oFirebaseAuth} from '@/datasource/firebase';
 export default {
     computed: {
         fnGetUser() {
             let oUserInfo = this.$store.getters.fnGetUser
             console.log(oUserInfo)
             return oUserInfo
+        }
+    },
+    methods: {
+        /* 비밀번호 재설정 메일 발송 */
+        fnSendPasswordReset(){
+            //비밀번호 재설정 메일 발송하기
+            oFirebaseAuth.sendPasswordResetEmail(this.fnGetUser.email)
+            .then(() => {
+                console.log('비밀번호 재설정 메일이 발송되었습니다.')
+            })
+            .catch((err) => {
+                console.log(err);
+            })
         }
     }
 }

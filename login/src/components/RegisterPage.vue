@@ -27,18 +27,24 @@
                     name="ConfirmPassword" label="패스워드 확인" v-model="sConfirmPassword"
                     type="password" required
                     :rules="[fnComparePassword]">
+                    <!-- rules: vuetify 자체에서 제공해주는 form 유효성 검사 기능-->
                     </v-text-field>
 
                     <v-btn 
                     type="submit"
-                    color="orange" dark v-if="!loading">회원가입</v-btn>
+                    color="orange" dark v-if="!fnGetLoading">회원가입</v-btn>
 
                     <!-- 시간 지연이 발생할 경우 회전 프로그레스 원 표시 -->
                     <v-progress-circular 
-                    v-if="loading"
+                    v-if="fnGetLoading"
                     color="grey lighten-1" :width="7" :size="60"
                     indeterminate>
                     </v-progress-circular>
+
+                    <!-- 오류 메시지가 있을 경우 알림창을 띄운다 -->
+                    <v-alert class="mt-3" type="error" dismissible v-model="bAlert">
+                        {{fnGetErrMsg}}
+                    </v-alert>
 
                 </form>
             </v-col>
@@ -53,7 +59,7 @@ export default {
             sEmail: '',
             sPassword: '',
             sConfirmPassword: '',
-            loading: false
+            bAlert: false
         }
     },
     computed: {
@@ -61,6 +67,12 @@ export default {
             if(this.sPassword == this.sConfirmPassword) {
                 return true
             }else return '패스워드가 일치하지 않습니다!'
+        },
+        fnGetLoading() {
+            return this.$store.getters.fnGetLoading;
+        },
+        fnGetErrMsg() {
+            return this.$store.getters.fnGetErrorMessage;
         }
     },
     methods: {
@@ -72,6 +84,16 @@ export default {
                 })
             }
         }
+    },
+    watch: {
+        //fnGetErrMsg의 값이 있으면 true로 바꿈
+        fnGetErrMsg(pMsg) {
+            if(pMsg) this.bAlert = true;
+        },
+        bAlert(pValue) {
+            if(pValue == false) this.$store.commit('fnSetErrorMessage', '');
+        }
     }
+
 }
 </script>
