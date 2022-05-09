@@ -1,30 +1,27 @@
-/* 에러 및 로딩 관련 store 모듈 */
+/* 에러 및 로딩관련 store 모듈 */
 
-export default{
+export default {
     state: {
-        bIsLoading: false, //처리 중 시간이 걸림
-        sErrorMessage: '', //처리 중 오류 메시지의 내용
+      bIsLoading: false, // 처리중 시간이 걸림을 표시
+      sErroreMessage: "", // 처리중 오류메세지의 내용
     },
     mutations: {
-        //처리 중에 시간이 걸리는지 여부를 설정
+        //처리중에 시간이 걸리는지 여부를 설정
         fnSetLoading(state, payload) {
             state.bIsLoading = payload;
         },
-        //처리 중에 오류메시지를 저장
+        //처리중에 오류메시지를 저장
         fnSetErrorMessage(state, payload) {
-            state.sErrorMessage = payload;
-        }
+            state.sErroreMessage = payload;
+        },
     },
     getters: {
         fnGetLoading(state) {
             return state.bIsLoading;
         },
-
         fnGetErrorMessage(state) {
-            return state.sErrorMessage;
-        }
+            return state.sErroreMessage;
+        },
     },
-    actions: {
-
-    }
-}
+    actions: {},
+};

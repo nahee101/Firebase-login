@@ -27,15 +27,14 @@
                     color="orange" dark v-if="!fnGetLoading">로그인</v-btn>
 
                     <!-- 시간 지연이 발생할 경우 회전 프로그레스 원 표시 -->
-                    <v-progress-circular 
-                    v-if="fnGetLoading"
+                    <v-progress-circular v-if="fnGetLoading"
                     color="grey lighten-1" :width="7" :size="60"
                     indeterminate>
                     </v-progress-circular>
 
                     <!-- 오류 메시지가 있을 경우 알림창을 띄운다 -->
                     <v-alert class="mt-3" type="error" dismissible v-model="bAlert">
-                        {{fnGetErrorMsg}}
+                        {{fnGetErrMsg}}
                     </v-alert>
 
                 </form>
